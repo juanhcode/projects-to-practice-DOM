@@ -6,11 +6,12 @@ const maximo = document.querySelector('#maximo');
 const puertas = document.querySelector('#puertas');
 const transmision = document.querySelector('#transmision');
 const color = document.querySelector('#color');
+
 const resultado = document.querySelector('#resultado'); //Donde se ve la info de los autos
-const max = new Date().getFullYear();
+const max = new Date().getFullYear(); //se obtiene el año actual
 const min = max - 10;
 
-//Objeto donde se lamcane la seleccion del auto del usuario
+//Objeto donde se almacene la seleccion del auto del usuario
 const datosBusqueda = {
     marca: '',
     year: '',
@@ -22,7 +23,7 @@ const datosBusqueda = {
 }
 //Eventos
 document.addEventListener("DOMContentLoaded", () => {
-    mostrarAutos();
+    mostrarAutos(autos);
     llenarSelectYear();
 });
 
@@ -52,7 +53,8 @@ color.addEventListener('change', (e) => {
 })
 
 //Funciones
-function mostrarAutos() {
+function mostrarAutos(autos) {
+    limpiarHTML(); //Elimina el HTML previo
     autos.forEach(auto => {
         const {
             marca,
@@ -71,8 +73,15 @@ function mostrarAutos() {
     });
 }
 
-function llenarSelectYear() {
+function limpiarHTML(){
+    while (resultado.firstChild){
+        resultado.removeChild(resultado.firstChild);
+    }
 
+}
+
+//Colocar los años en la seccion year
+function llenarSelectYear() {
     for (let i = max; i >= min; i--) {
         const opcion = document.createElement('option');
         opcion.value = i;
@@ -84,7 +93,8 @@ function llenarSelectYear() {
 
 function filtrarAuto(){
     const resultado = autos.filter(filtrarMarca).filter(filtrarYear);
-    console.log(resultado);
+    mostrarAutos(resultado);
+
 }
 
 function filtrarMarca(auto){
