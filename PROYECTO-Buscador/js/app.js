@@ -38,18 +38,24 @@ year.addEventListener('change', (e) => {
 })
 minimo.addEventListener('change', (e) => {
     datosBusqueda.minimo = e.target.value;
+    filtrarAuto();
 })
 maximo.addEventListener('change', (e) => {
     datosBusqueda.maximo = e.target.value;
+    filtrarAuto();
 })
 puertas.addEventListener('change', (e) => {
-    datosBusqueda.puertas = e.target.value;
+    datosBusqueda.puertas = parseInt(e.target.value);
+    filtrarAuto();
 })
 transmision.addEventListener('change', (e) => {
     datosBusqueda.transmision = e.target.value;
+    filtrarAuto();
 })
 color.addEventListener('change', (e) => {
     datosBusqueda.color = e.target.value;
+    filtrarAuto();
+    console.log(datosBusqueda)
 })
 
 //Funciones
@@ -92,9 +98,19 @@ function llenarSelectYear() {
 }
 
 function filtrarAuto(){
-    const resultado = autos.filter(filtrarMarca).filter(filtrarYear);
-    mostrarAutos(resultado);
-
+    limpiarHTML();
+    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo).filter(filtrarMaximo).filter(filtrarPorPuertas).filter(filtrarPorTransmision).filter(filtrarPorColor);
+    if(resultado.length){
+        mostrarAutos(resultado);
+    }else{
+        noResultado();
+    }
+}
+function noResultado(){
+    const noResultado = document.createElement("div");
+    noResultado.classList.add('alerta','error');
+    noResultado.textContent='No hay resultados, intenta con ostros terminos de busqueda';
+    resultado.appendChild(noResultado);
 }
 
 function filtrarMarca(auto){
@@ -114,4 +130,44 @@ function filtrarYear(auto){
     return auto;
 }
 
-//TODO mostrar resultado de los filtrados en HTML
+function filtrarMinimo(auto){
+    const {minimo} = datosBusqueda;
+    if(minimo) {
+        return auto.precio >= minimo;
+    }
+    return auto;
+}
+
+function filtrarMaximo(auto){
+    const {maximo} = datosBusqueda;
+    if(maximo) {
+        return auto.precio <= maximo;
+    }
+    return auto;
+
+}
+
+function filtrarPorPuertas(auto){
+    const {puertas} = datosBusqueda;
+    if(puertas) {
+        return auto.puertas === puertas;
+    }
+    return auto;
+
+}
+
+function filtrarPorTransmision(auto){
+    const {transmision} = datosBusqueda;
+    if(transmision) {
+        return auto.transmision === transmision;
+    }
+    return auto;
+}
+
+function filtrarPorColor(auto){
+    const {color} = datosBusqueda;
+    if(color){
+        return auto.color === color;
+    }
+    return auto;
+}
