@@ -26,8 +26,19 @@ Seguro.prototype.cotizarSeguro = function () {
         default:
             break;
     }
-    console.log(cantidad);
+    //leer año
+    const diferencia = new Date().getFullYear() - this.year;
     //Cada año que la diferencia es mayor , el costo va reducirse un 3%
+    cantidad -= ((diferencia * 3) * cantidad)  / 100;
+    console.log(cantidad);
+
+    if(this.tipo === 'basico'){
+        cantidad *= 1.30;
+    }else{
+        cantidad *= 1.50;
+    }
+
+    return cantidad;
 }
 
 function UI() {}
@@ -88,9 +99,7 @@ function cotizarSeguro(e) {
     ui.mostrarMensaje('Cotizando......', 'exito');
     //Instanciar el seguro
     const seguro = new Seguro(marca, year, tipo);
-    seguro.cotizarSeguro();
-    //cada año que la diferencia es mayor , el costo se reduce en 3%
-    const diferencia = new Date().getFullYear() -this.year;
-    cantidad -= ((diferencia*3) * cantidad) / 100;
-    console.log(cantidad);
+    const total = seguro.cotizarSeguro();
+    
+
 }
